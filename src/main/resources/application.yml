@@ -2,3 +2,11 @@ server:
   port: 5004
   servlet:
     context-path: /test-bitcoin-pay
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
