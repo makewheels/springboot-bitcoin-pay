@@ -1,10 +1,11 @@
 package com.eg.testbitcoinpay.order;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "order")
-public class Order {
+public class Order implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

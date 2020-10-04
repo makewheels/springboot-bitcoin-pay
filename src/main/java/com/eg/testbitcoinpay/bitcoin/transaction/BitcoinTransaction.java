@@ -1,10 +1,11 @@
 package com.eg.testbitcoinpay.bitcoin.transaction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "pay_bitcoin_transaction")
-public class PayBitcoinTransaction {
+@Table(name = "bitcoin_transaction")
+public class BitcoinTransaction implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

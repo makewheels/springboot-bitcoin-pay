@@ -34,7 +34,7 @@ CREATE TABLE `bitcoin_address` (
 	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `pay_bitcoin_transaction` (
+CREATE TABLE `bitcoin_transaction` (
 	`id` INT NOT NULL AUTO_INCREMENT COMMENT 'uuid',
 	`uuid` VARCHAR(100) COMMENT 'id',
 	`create_time` TIMESTAMP,
