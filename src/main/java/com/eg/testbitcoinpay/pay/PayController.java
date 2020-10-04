@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -40,7 +41,7 @@ public class PayController {
     @RequestMapping("/submitOrder")
     public String submitOrder(
             Map<String, Object> map,
-            @RequestParam("legalTenderAmount") double legalTenderAmount,
+            @RequestParam("legalTenderAmount") BigDecimal legalTenderAmount,
             @RequestParam("legalTenderCurrency") String legalTenderCurrency,
             @RequestParam("payMethod") String payMethod
     ) {

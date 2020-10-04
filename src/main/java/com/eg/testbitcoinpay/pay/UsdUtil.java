@@ -1,5 +1,7 @@
 package com.eg.testbitcoinpay.pay;
 
+import java.math.BigDecimal;
+
 /**
  * USD美元工具类
  */
@@ -10,7 +12,7 @@ public class UsdUtil {
      * @param dollar
      * @return
      */
-    public static int dollarToCents(double dollar) {
-        return (int) (dollar * 100);
+    public static int dollarToCents(BigDecimal dollar) {
+        return dollar.multiply(new BigDecimal(100)).intValue();
     }
 }

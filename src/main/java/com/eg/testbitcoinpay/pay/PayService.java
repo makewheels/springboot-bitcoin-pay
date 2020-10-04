@@ -8,6 +8,7 @@ import com.eg.testbitcoinpay.util.UuidUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Service
@@ -23,7 +24,7 @@ public class PayService {
      * @param payMethod
      * @return
      */
-    public Order createOrder(double legalTenderAmount, String legalTenderCurrency, String payMethod) {
+    public Order createOrder(BigDecimal legalTenderAmount, String legalTenderCurrency, String payMethod) {
         Order order = new Order();
         order.setUuid(UuidUtil.getUuid());
         order.setName("bitcoin-pay-order-" + UuidUtil.getUuidWithoutHyphen());
@@ -37,12 +38,13 @@ public class PayService {
         if (legalTenderCurrency.equals("USD")) {
             order.setLegalTenderAmount(UsdUtil.dollarToCents(legalTenderAmount));
         } else if (legalTenderCurrency.equals("CNY")) {
-            order.setLegalTenderAmount((int) (legalTenderAmount * 100));
+            order.setLegalTenderAmount((legalTenderAmount.multiply(new BigDecimal(100)).intValue()));
         }
         order.setDigitalCurrency(payMethod);
         //获取币价
-        double bitcoinPrice = QueryPriceUtil.getBitcoinPrice();
+        BigDecimal bitcoinPrice = QueryPriceUtil.getBitcoinPrice();
         order.setBitcoinPriceUsd(UsdUtil.dollarToCents(bitcoinPrice));
+        System.out.println("btc price " + bitcoinPrice);
         //折算出比特币数量
 
         System.out.println(order);
