@@ -16,6 +16,6 @@ public class PageController {
     @RequestMapping("/pay")
     public String toPayPage(Map<String, String> map) {
         map.put("hello", "afweyes");
-        return "pay";
+        return "submit_order";
     }
 }

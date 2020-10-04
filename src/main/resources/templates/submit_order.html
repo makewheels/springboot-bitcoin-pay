@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>submit order</title>
+</head>
+<body>
+<form action="" method="post">
+    <table>
+        <tr>
+            <td>legal tender currency</td>
+            <td>
+                <input name="fname" th:value="${}" type="text"/>
+                <span> USD</span>
+            </td>
+        </tr>
+        <tr>
+            <td>bitcoin amount</td>
+            <td><input name="fname" th:value="${}" type="text"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Pay"/></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.bitcoin;
+package com.eg.testbitcoinpay.bitcoin.address;
 
 import org.springframework.stereotype.Service;
 

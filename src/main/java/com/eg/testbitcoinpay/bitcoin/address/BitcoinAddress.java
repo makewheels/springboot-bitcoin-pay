@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.bitcoin;
+package com.eg.testbitcoinpay.bitcoin.address;
 
 import javax.persistence.*;
 import java.io.Serializable;
