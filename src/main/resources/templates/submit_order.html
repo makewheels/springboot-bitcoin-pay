@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>submit order</title>
+    <title>request pay</title>
 </head>
 <body>
 <form action="" method="post">
@@ -10,17 +10,27 @@
         <tr>
             <td>legal tender currency</td>
             <td>
-                <input name="fname" th:value="${}" type="text"/>
-                <span> USD</span>
+                <input name="legalTenderAmount" th:value="${legalTenderAmount}" type="text"/>
+                <select name="legalTenderCurrency">
+                    <option th:value="${legalTenderCurrency}">
+                        <span th:text="${legalTenderCurrency}"></span>
+                    </option>
+                </select>
             </td>
         </tr>
         <tr>
-            <td>bitcoin amount</td>
-            <td><input name="fname" th:value="${}" type="text"/></td>
+            <td>pay method</td>
+            <td>
+                <select name="payMethod">
+                    <option th:value="${payMethod}">
+                        <span th:text="${payMethod}"></span>
+                    </option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Pay"/></td>
+            <td><input type="submit" value="submit order"/></td>
         </tr>
     </table>
 </form>
