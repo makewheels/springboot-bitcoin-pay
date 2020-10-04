@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 
 /**
  * 查询币价
+ * <p>
+ * https://api.huobi.com/market/trade?symbol=btcusdt
+ * https://www.okex.com/api/spot/v3/instruments/BTC-USDT/ticker
  */
 public class QueryPriceUtil {
     public static BigDecimal getBitcoinPrice() {

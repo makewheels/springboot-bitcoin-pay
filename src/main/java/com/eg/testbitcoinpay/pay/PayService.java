@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Service
 public class PayService {
@@ -27,10 +27,10 @@ public class PayService {
     public Order createOrder(BigDecimal legalTenderAmount, String legalTenderCurrency, String payMethod) {
         Order order = new Order();
         order.setUuid(UuidUtil.getUuid());
-        order.setName("bitcoin-pay-order-" + UuidUtil.getUuidWithoutHyphen());
         long creatTime = System.currentTimeMillis();
-        order.setCreateTime(new Timestamp(creatTime));
-        order.setInvalidTime(new Timestamp(creatTime + Constants.ORDER_VALID_TIME_LENGTH));
+        order.setCreateTime(new Date(creatTime));
+        order.setName("bitcoin-pay-order_" + order.getCreateTime());
+        order.setInvalidTime(new Date(creatTime + Constants.ORDER_VALID_TIME_LENGTH));
         order.setValidTimeLength(Constants.ORDER_VALID_TIME_LENGTH);
         order.setPayMethod(payMethod);
         order.setLegalTenderCurrency(legalTenderCurrency);
@@ -44,8 +44,11 @@ public class PayService {
         //获取币价
         BigDecimal bitcoinPrice = QueryPriceUtil.getBitcoinPrice();
         order.setBitcoinPriceUsd(UsdUtil.dollarToCents(bitcoinPrice));
-        System.out.println("btc price " + bitcoinPrice);
+        System.out.println("got BTC price in USDT from huobi: " + bitcoinPrice);
         //折算出比特币数量
+        //计算方法，美元数量除以比特币价格
+        long satoshi = BtcUtil.btcToSatoshi(legalTenderAmount.divide(bitcoinPrice, 9, BigDecimal.ROUND_UP));
+        order.setBitcoinAmount(satoshi);
 
         System.out.println(order);
         orderRepository.save(order);

@@ -1,8 +1,12 @@
 package com.eg.testbitcoinpay.bitcoin.transaction;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "bitcoin_transaction")
 public class BitcoinTransaction implements Serializable {
@@ -15,7 +19,7 @@ public class BitcoinTransaction implements Serializable {
     private String uuid;
 
     @Column(name = "create_time")
-    private java.sql.Timestamp createTime;
+    private Date createTime;
 
     @Column(name = "receive_address")
     private Integer receiveAddress;
@@ -24,7 +28,7 @@ public class BitcoinTransaction implements Serializable {
     private Long satoshi;
 
     @Column(name = "timereceived")
-    private java.sql.Timestamp timereceived;
+    private Date timereceived;
 
     @Column(name = "confirmations")
     private Integer confirmations;
@@ -32,68 +36,4 @@ public class BitcoinTransaction implements Serializable {
     @Column(name = "txid")
     private String txid;
 
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUuid() {
-        return this.uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public java.sql.Timestamp getCreateTime() {
-        return this.createTime;
-    }
-
-    public void setCreateTime(java.sql.Timestamp createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getReceiveAddress() {
-        return this.receiveAddress;
-    }
-
-    public void setReceiveAddress(Integer receiveAddress) {
-        this.receiveAddress = receiveAddress;
-    }
-
-    public Long getSatoshi() {
-        return this.satoshi;
-    }
-
-    public void setSatoshi(Long satoshi) {
-        this.satoshi = satoshi;
-    }
-
-    public java.sql.Timestamp getTimereceived() {
-        return this.timereceived;
-    }
-
-    public void setTimereceived(java.sql.Timestamp timereceived) {
-        this.timereceived = timereceived;
-    }
-
-    public Integer getConfirmations() {
-        return this.confirmations;
-    }
-
-    public void setConfirmations(Integer confirmations) {
-        this.confirmations = confirmations;
-    }
-
-    public String getTxid() {
-        return this.txid;
-    }
-
-    public void setTxid(String txid) {
-        this.txid = txid;
-    }
 }

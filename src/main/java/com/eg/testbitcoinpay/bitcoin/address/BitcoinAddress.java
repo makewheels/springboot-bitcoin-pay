@@ -1,8 +1,12 @@
 package com.eg.testbitcoinpay.bitcoin.address;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "bitcoin_address")
 public class BitcoinAddress implements Serializable {
@@ -15,7 +19,7 @@ public class BitcoinAddress implements Serializable {
     private String uuid;
 
     @Column(name = "create_time")
-    private java.sql.Timestamp createTime;
+    private Date createTime;
 
     @Column(name = "orderId")
     private Integer orderId;
@@ -32,68 +36,4 @@ public class BitcoinAddress implements Serializable {
     @Column(name = "satoshi")
     private Long satoshi;
 
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUuid() {
-        return this.uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public java.sql.Timestamp getCreateTime() {
-        return this.createTime;
-    }
-
-    public void setCreateTime(java.sql.Timestamp createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getOrderId() {
-        return this.orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPrivateKey() {
-        return this.privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
-
-    public String getLabel() {
-        return this.label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public Long getSatoshi() {
-        return this.satoshi;
-    }
-
-    public void setSatoshi(Long satoshi) {
-        this.satoshi = satoshi;
-    }
 }
