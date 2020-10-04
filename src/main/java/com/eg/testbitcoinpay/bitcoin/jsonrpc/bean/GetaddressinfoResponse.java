@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.bitcoin.jsonrpc;
+package com.eg.testbitcoinpay.bitcoin.jsonrpc.bean;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.pay;
+package com.eg.testbitcoinpay.pay.util;
 
 import java.math.BigDecimal;
 

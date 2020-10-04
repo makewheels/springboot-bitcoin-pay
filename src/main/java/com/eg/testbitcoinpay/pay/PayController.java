@@ -1,6 +1,7 @@
 package com.eg.testbitcoinpay.pay;
 
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
+import com.eg.testbitcoinpay.bitcoin.util.BitcoinUtil;
 import com.eg.testbitcoinpay.order.PayOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,7 @@ public class PayController {
     ) {
         //创建订单
         PayOrder payOrder = payService.createPayOrder(legalTenderAmount, legalTenderCurrency, payMethod);
+        map.put("payOrderUuid", payOrder.getUuid());
         BigDecimal bitcoinAmount = BitcoinUtil.satoshiToBtc(payOrder.getBitcoinAmount());
         map.put("bitcoinAmount", bitcoinAmount);
 
@@ -56,4 +58,11 @@ public class PayController {
         map.put("bitcoinAddress", bitcoinAddress.getAddress());
         return "wait_bitcoin_pay";
     }
+
+    @RequestMapping("/queryTransaction")
+    public String queryTransaction(String payOrderUuid) {
+        Boolean result = payService.checkPayOrder(payOrderUuid);
+        return result.toString();
+    }
+
 }

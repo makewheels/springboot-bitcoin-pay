@@ -1,13 +1,17 @@
 package com.eg.testbitcoinpay.bitcoin.jsonrpc;
 
 import com.alibaba.fastjson.JSON;
+import com.eg.testbitcoinpay.bitcoin.jsonrpc.bean.GetaddressinfoResponse;
+import com.eg.testbitcoinpay.bitcoin.jsonrpc.bean.ListtransactionsResponse;
 import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -84,6 +88,29 @@ public class BitcoinJsonRpcService {
         try {
             return jsonRpcHttpClient.invoke("dumpprivkey",
                     new Object[]{address}, String.class);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 查询交易，之前地址已经打了label，那就根据label查询对应地址的交易
+     *
+     * @param label
+     * @return
+     */
+    public List<ListtransactionsResponse> listtransactions(String label) {
+        try {
+            Object result;
+            if (StringUtils.isNotEmpty(label)) {
+                result = jsonRpcHttpClient.invoke("listtransactions",
+                        new Object[]{label}, Object.class);
+            } else {
+                result = jsonRpcHttpClient.invoke("listtransactions",
+                        new Object[]{label}, Object.class);
+            }
+            return JSON.parseArray(JSON.toJSONString(result), ListtransactionsResponse.class);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }

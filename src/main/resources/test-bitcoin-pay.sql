@@ -17,6 +17,7 @@ CREATE TABLE `pay_order` (
 	`bitcoin_amount` BIGINT COMMENT '比特币金额按satoshi计',
 
 	`bitcoin_price_usd` INT COMMENT '比特币美元价格',
+	`paid` BIT COMMENT '此订单是否已支付',
 
 	PRIMARY KEY (`id`)
 );

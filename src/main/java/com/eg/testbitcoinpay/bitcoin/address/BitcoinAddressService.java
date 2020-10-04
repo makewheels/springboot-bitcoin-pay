@@ -1,12 +1,13 @@
 package com.eg.testbitcoinpay.bitcoin.address;
 
 import com.eg.testbitcoinpay.bitcoin.jsonrpc.BitcoinJsonRpcService;
-import com.eg.testbitcoinpay.bitcoin.jsonrpc.GetaddressinfoResponse;
+import com.eg.testbitcoinpay.bitcoin.jsonrpc.bean.GetaddressinfoResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class BitcoinAddressService {
@@ -48,5 +49,16 @@ public class BitcoinAddressService {
         //获取地址私钥
         bitcoinAddress.setPrivateKey(bitcoinJsonRpcService.dumpprivkey(addressString));
         return bitcoinAddress;
+    }
+
+    /**
+     * 根据订单uuid查询比特币地址
+     *
+     * @param payOrderId
+     * @return
+     */
+    public BitcoinAddress findBitcoinAddressByPayOrderId(Integer payOrderId) {
+        Optional<BitcoinAddress> bitcoinAddressOptional = bitcoinAddressRepository.findById(payOrderId);
+        return bitcoinAddressOptional.orElse(null);
     }
 }

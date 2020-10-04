@@ -51,4 +51,8 @@ public class PayOrder implements Serializable {
     @Column(name = "bitcoin_price_usd")
     private Integer bitcoinPriceUsd;
 
+    @Column(name = "paid")
+    //该订单是否已经支付
+    private Boolean paid;
+
 }
