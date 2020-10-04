@@ -25,11 +25,13 @@ CREATE TABLE `bitcoin_address` (
 	`id` INT NOT NULL AUTO_INCREMENT COMMENT 'uuid',
 	`uuid` VARCHAR(100) COMMENT 'id',
 	`create_time` DATETIME,
-	`order_id` INT,
+	`pay_order_id` INT,
 	`address` VARCHAR(100),
 	`private_key` VARCHAR(200),
+	`public_key` VARCHAR(200),
 	`label` VARCHAR(100),
 	`satoshi` BIGINT,
+	`timestamp` BIGINT,
 	PRIMARY KEY (`id`)
 );
 

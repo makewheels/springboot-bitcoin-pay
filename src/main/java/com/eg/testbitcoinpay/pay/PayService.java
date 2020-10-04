@@ -1,5 +1,7 @@
 package com.eg.testbitcoinpay.pay;
 
+import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
+import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddressService;
 import com.eg.testbitcoinpay.huobi.QueryPriceUtil;
 import com.eg.testbitcoinpay.order.PayOrder;
 import com.eg.testbitcoinpay.order.PayOrderRepository;
@@ -15,6 +17,8 @@ import java.util.Date;
 public class PayService {
     @Resource
     private PayOrderRepository payOrderRepository;
+    @Resource
+    private BitcoinAddressService bitcoinAddressService;
 
     /**
      * 创建订单
@@ -44,14 +48,23 @@ public class PayService {
         //获取币价
         BigDecimal bitcoinPrice = QueryPriceUtil.getBitcoinPrice();
         payOrder.setBitcoinPriceUsd(UsdUtil.dollarToCents(bitcoinPrice));
-        System.out.println("got BTC price in USDT from huobi: " + bitcoinPrice);
-        //折算出比特币数量
-        //计算方法，美元数量除以比特币价格
-        long satoshi = BitcoinUtil.btcToSatoshi(legalTenderAmount.divide(bitcoinPrice, 9, BigDecimal.ROUND_UP));
+        //折算出比特币数量，计算方法：美元数量除以比特币USDT价格
+        long satoshi = BitcoinUtil.btcToSatoshi(
+                legalTenderAmount.divide(bitcoinPrice, 9, BigDecimal.ROUND_UP));
         payOrder.setBitcoinAmount(satoshi);
-
-        System.out.println(payOrder);
         payOrderRepository.save(payOrder);
         return payOrder;
+    }
+
+    /**
+     * 创建比特币地址
+     */
+    public BitcoinAddress createBitcoinAddress(PayOrder payOrder) {
+        BitcoinAddress bitcoinAddress = bitcoinAddressService.createBitcoinAddress(UuidUtil.getUuid());
+        bitcoinAddress.setUuid(UuidUtil.getUuid());
+        bitcoinAddress.setPayOrderId(payOrder.getId());
+        //保存地址到数据库
+        bitcoinAddressService.save(bitcoinAddress);
+        return bitcoinAddress;
     }
 }

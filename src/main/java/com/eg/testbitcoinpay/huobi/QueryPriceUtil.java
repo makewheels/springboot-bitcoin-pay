@@ -16,6 +16,8 @@ public class QueryPriceUtil {
     public static BigDecimal getBitcoinPrice() {
         String url = "https://api.huobi.com/market/trade?symbol=btcusdt";
         MarketTradeResponse marketTradeResponse = JSON.parseObject(HttpUtil.getProxy(url), MarketTradeResponse.class);
-        return marketTradeResponse.getTick().getData().get(0).getPrice();
+        BigDecimal bitcoinPrice = marketTradeResponse.getTick().getData().get(0).getPrice();
+        System.out.println("got BTC price in USDT from huobi: " + bitcoinPrice);
+        return bitcoinPrice;
     }
 }
