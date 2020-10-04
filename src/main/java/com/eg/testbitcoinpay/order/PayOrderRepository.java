@@ -2,5 +2,5 @@ package com.eg.testbitcoinpay.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface PayOrderRepository extends JpaRepository<PayOrder, Integer> {
 }

@@ -1,6 +1,6 @@
 package com.eg.testbitcoinpay.pay;
 
-import com.eg.testbitcoinpay.order.Order;
+import com.eg.testbitcoinpay.order.PayOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,9 +46,9 @@ public class PayController {
             @RequestParam("payMethod") String payMethod
     ) {
         //创建订单
-        Order order = payService.createOrder(legalTenderAmount, legalTenderCurrency, payMethod);
-
-        map.put("bitcoinAmount", 0);
+        PayOrder payOrder = payService.createPayOrder(legalTenderAmount, legalTenderCurrency, payMethod);
+        BigDecimal bitcoinAmount = BitcoinUtil.satoshiToBtc(payOrder.getBitcoinAmount());
+        map.put("bitcoinAmount", bitcoinAmount);
         return "wait_bitcoin_pay";
     }
 }

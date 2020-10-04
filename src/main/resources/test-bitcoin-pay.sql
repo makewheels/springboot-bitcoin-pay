@@ -1,4 +1,4 @@
-CREATE TABLE `order` (
+CREATE TABLE `pay_order` (
 	`id` INT NOT NULL AUTO_INCREMENT COMMENT '自增',
 	`uuid` VARCHAR(100) COMMENT 'id',
 	`name` VARCHAR(500) COMMENT '订单名',

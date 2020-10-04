@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class OrderService {
+public class PayOrderService {
     @Resource
-    private OrderRepository orderRepository;
+    private PayOrderRepository payOrderRepository;
 }
