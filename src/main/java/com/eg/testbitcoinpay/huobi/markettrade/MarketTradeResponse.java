@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.huobi.coinprice;
+package com.eg.testbitcoinpay.huobi.markettrade;
 
 public class MarketTradeResponse {
 	private String ch;

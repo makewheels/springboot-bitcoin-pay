@@ -5,7 +5,7 @@
     <title>request pay</title>
 </head>
 <body>
-<form action="" method="post">
+<form method="post" th:action="@{/pay/submitOrder}">
     <table>
         <tr>
             <td>legal tender currency</td>
@@ -22,8 +22,8 @@
             <td>pay method</td>
             <td>
                 <select name="payMethod">
-                    <option th:value="${payMethod}">
-                        <span th:text="${payMethod}"></span>
+                    <option th:value="${payMethod1}">
+                        <span th:text="${payMethod1}"></span>
                     </option>
                 </select>
             </td>

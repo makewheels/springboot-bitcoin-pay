@@ -1,4 +1,4 @@
-package com.eg.testbitcoinpay.huobi.coinprice;
+package com.eg.testbitcoinpay.huobi.markettrade;
 
 public class DataItem {
 	private long tradeId;
