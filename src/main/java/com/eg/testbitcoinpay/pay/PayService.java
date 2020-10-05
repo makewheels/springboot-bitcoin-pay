@@ -128,6 +128,8 @@ public class PayService {
             bitcoinAddressService.save(bitcoinAddress);
         }
         //看是否已经收到足够的satoshi
+        //其实这里还可以做很多事情，订单状态修改，也要分确认数
+        //还有就是支付时间
         if (totalReceivedSatoshi >= payOrder.getBitcoinAmount()) {
             payOrderInfoResponse.setPayOrderState("is ok 支付完成了，确认数还不知道");
         } else {
