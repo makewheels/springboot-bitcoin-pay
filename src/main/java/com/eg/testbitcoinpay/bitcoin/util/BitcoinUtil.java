@@ -13,6 +13,6 @@ public class BitcoinUtil {
     }
 
     public static BigDecimal satoshiToBtc(long satoshi) {
-        return new BigDecimal(satoshi).divide(ONE_BTC_IN_SATOSHI, 9, BigDecimal.ROUND_HALF_DOWN);
+        return new BigDecimal(satoshi).divide(ONE_BTC_IN_SATOSHI, 8, BigDecimal.ROUND_HALF_DOWN);
     }
 }

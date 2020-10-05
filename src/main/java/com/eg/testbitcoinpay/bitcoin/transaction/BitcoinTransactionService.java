@@ -64,14 +64,14 @@ public class BitcoinTransactionService {
     /**
      * 把网络交易信息更新到数据库
      *
-     * @param transactionsFromNet
+     * @param transactionListFromNet
      * @return 数据库是否发生了更新
      */
-    public boolean updateTransactionsToDatabase(List<BitcoinTransaction> transactionsFromNet) {
+    public boolean updateTransactionsToDatabase(List<BitcoinTransaction> transactionListFromNet) {
         //更新方法是，根据txid从数据库中找对应交易
         //如果找到，更新确认数
         //如果没找到，那这就是一个新的交易，保存到数据库
-        for (BitcoinTransaction bitcoinTransactionFromNet : transactionsFromNet) {
+        for (BitcoinTransaction bitcoinTransactionFromNet : transactionListFromNet) {
             BitcoinTransaction findBitcoinTransaction
                     = bitcoinTransactionRepository.findByTxid(bitcoinTransactionFromNet.getTxid());
             //如果没有这个交易，保存到数据库
@@ -95,6 +95,22 @@ public class BitcoinTransactionService {
             }
         }
         return false;
+    }
+
+    /**
+     * 计算收到的比特币总数
+     *
+     * @param bitcoinTransactionList
+     * @return
+     */
+    public long getTotalReceivedSatoshi(List<BitcoinTransaction> bitcoinTransactionList) {
+        long totalSatoshi = 0;
+        for (BitcoinTransaction bitcoinTransaction : bitcoinTransactionList) {
+            if (bitcoinTransaction.getCategory().equals("receive")) {
+                totalSatoshi += bitcoinTransaction.getSatoshi();
+            }
+        }
+        return totalSatoshi;
     }
 
 }
