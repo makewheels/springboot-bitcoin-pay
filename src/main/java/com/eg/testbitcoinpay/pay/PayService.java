@@ -3,6 +3,7 @@ package com.eg.testbitcoinpay.pay;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddressService;
 import com.eg.testbitcoinpay.bitcoin.jsonrpc.BitcoinJsonRpcService;
+import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransaction;
 import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransactionService;
 import com.eg.testbitcoinpay.bitcoin.util.BitcoinUtil;
 import com.eg.testbitcoinpay.huobi.QueryPriceUtil;
@@ -15,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PayService {
@@ -78,6 +82,61 @@ public class PayService {
     }
 
     /**
+     * 查询订单
+     *
+     * @return
+     */
+    public PayOrderInfoResponse queryPayOrder(String payOrderUuid) {
+        //根据uuid找出订单
+        PayOrder payOrder = findPayOrderByUuid(payOrderUuid);
+        //根据订单id找出比特币收款地址
+        BitcoinAddress bitcoinAddress
+                = bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
+        //返回给前端的订单状态
+        PayOrderInfoResponse payOrderInfoResponse = new PayOrderInfoResponse();
+        //根据比特币地址查询交易列表
+        List<BitcoinTransaction> transactionListFromNet
+                = bitcoinTransactionService.findBitcoinTransactionsByBitcoinAddressFromNet(bitcoinAddress);
+        //把交易列表装载到TransactionResponse里
+        List<TransactionResponse> transactionResponseList = new ArrayList<>();
+        for (BitcoinTransaction bitcoinTransaction : transactionListFromNet) {
+            TransactionResponse transactionResponse = new TransactionResponse();
+            DecimalFormat decimalFormat = new DecimalFormat("#0.00000000");
+            transactionResponse.setAmount(decimalFormat.format(
+                    BitcoinUtil.satoshiToBtc(bitcoinTransaction.getSatoshi())));
+            transactionResponse.setConfirmations(bitcoinTransaction.getConfirmations());
+            transactionResponse.setTxid(bitcoinTransaction.getTxid());
+            transactionResponse.setTimereceived(bitcoinTransaction.getTimereceived().getTime());
+            transactionResponseList.add(transactionResponse);
+        }
+        payOrderInfoResponse.setTransactionResponseList(transactionResponseList);
+        //更新交易到数据库
+        bitcoinTransactionService.updateTransactionsToDatabase(transactionListFromNet);
+        //计算收到的比特币总数
+        long totalReceivedSatoshi = bitcoinTransactionService.getTotalReceivedSatoshi(transactionListFromNet);
+        //返回给前端的总收币数，赋值
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00000000");
+        payOrderInfoResponse.setTotalReceived(
+                decimalFormat.format(BitcoinUtil.satoshiToBtc(totalReceivedSatoshi)));
+        //更新订单对应的，比特币收款地址的，比特币总额
+        Long bitcoinAddressSatoshi = bitcoinAddress.getSatoshi();
+        if (bitcoinAddressSatoshi == null) {
+            bitcoinAddressSatoshi = 0L;
+        }
+        if (bitcoinAddressSatoshi != totalReceivedSatoshi) {
+            bitcoinAddress.setSatoshi(totalReceivedSatoshi);
+            bitcoinAddressService.save(bitcoinAddress);
+        }
+        //看是否已经收到足够的satoshi
+        if (totalReceivedSatoshi >= payOrder.getBitcoinAmount()) {
+            payOrderInfoResponse.setPayOrderState("is ok 支付完成了，确认数还不知道");
+        } else {
+            payOrderInfoResponse.setPayOrderState("尚未支付~~~");
+        }
+        return payOrderInfoResponse;
+    }
+
+    /**
      * 根据uuid查找订单
      *
      * @param payOrderUuid
@@ -85,16 +144,6 @@ public class PayService {
      */
     public PayOrder findPayOrderByUuid(String payOrderUuid) {
         return payOrderRepository.findByUuid(payOrderUuid);
-    }
-
-    /**
-     * 根据订单查找比特币收款地址
-     *
-     * @param payOrder
-     * @return
-     */
-    public BitcoinAddress findBitcoinAddressByPayOrder(PayOrder payOrder) {
-        return bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
     }
 
 }

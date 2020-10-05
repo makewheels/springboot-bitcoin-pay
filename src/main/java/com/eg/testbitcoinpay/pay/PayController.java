@@ -1,8 +1,8 @@
 package com.eg.testbitcoinpay.pay;
 
+import com.alibaba.fastjson.JSON;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddressService;
-import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransaction;
 import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransactionService;
 import com.eg.testbitcoinpay.bitcoin.util.BitcoinUtil;
 import com.eg.testbitcoinpay.order.PayOrder;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -74,27 +73,13 @@ public class PayController {
      * @param payOrderUuid
      * @return
      */
-    @RequestMapping("/queryTransaction")
+    @RequestMapping("/queryPayOrder")
     @ResponseBody
-    public String queryTransaction(String payOrderUuid) {
-        //根据uuid找出订单
-        PayOrder payOrder = payService.findPayOrderByUuid(payOrderUuid);
-        //根据订单id找出比特币收款地址
-        BitcoinAddress bitcoinAddress
-                = bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
-        //根据比特币地址查询交易列表
-        List<BitcoinTransaction> transactionListFromNet
-                = bitcoinTransactionService.findBitcoinTransactionsByBitcoinAddressFromNet(bitcoinAddress);
-        //更新交易到数据库
-        bitcoinTransactionService.updateTransactionsToDatabase(transactionListFromNet);
-        //计算收到的比特币总数
-        long totalReceivedSatoshi = bitcoinTransactionService.getTotalReceivedSatoshi(transactionListFromNet);
-        //看是否已经收到足够的satoshi
-        if (totalReceivedSatoshi >= payOrder.getBitcoinAmount()) {
-            return "足够的satoshi";
-        } else {
-            return "hello- not enough~~~";
-        }
+    public String queryPayOrder(String payOrderUuid) {
+        PayOrderInfoResponse payOrderInfoResponse = payService.queryPayOrder(payOrderUuid);
+        String s = JSON.toJSONString(payOrderInfoResponse);
+        System.out.println(s);
+        return s;
     }
 
 }

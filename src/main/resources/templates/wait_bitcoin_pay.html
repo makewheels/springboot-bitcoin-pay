@@ -16,17 +16,14 @@
         <td>bitcoin address</td>
         <td><span th:text="${bitcoinAddress}"></span></td>
     </tr>
-    <tr>
-        <td><span id="result"></span></td>
-        <td></td>
-    </tr>
 </table>
+<span id="result"></span>
 <script>
     var timer;
 
     function queryPayOrder() {
         $.ajax({
-            url: "[[@{/pay/queryTransaction}]]",
+            url: "[[@{/pay/queryPayOrder}]]",
             data: {
                 payOrderUuid: "[[${payOrderUuid}]]"
             },
