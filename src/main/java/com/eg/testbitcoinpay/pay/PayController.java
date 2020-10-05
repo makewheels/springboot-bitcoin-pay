@@ -1,6 +1,9 @@
 package com.eg.testbitcoinpay.pay;
 
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
+import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddressService;
+import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransaction;
+import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransactionService;
 import com.eg.testbitcoinpay.bitcoin.util.BitcoinUtil;
 import com.eg.testbitcoinpay.order.PayOrder;
 import org.springframework.stereotype.Controller;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -16,6 +20,10 @@ import java.util.Map;
 public class PayController {
     @Resource
     private PayService payService;
+    @Resource
+    private BitcoinAddressService bitcoinAddressService;
+    @Resource
+    private BitcoinTransactionService bitcoinTransactionService;
 
     /**
      * 请求支付
@@ -59,10 +67,25 @@ public class PayController {
         return "wait_bitcoin_pay";
     }
 
+    /**
+     * 前端查询订单支付信息
+     *
+     * @param payOrderUuid
+     * @return
+     */
     @RequestMapping("/queryTransaction")
     public String queryTransaction(String payOrderUuid) {
-        Boolean result = payService.checkPayOrder(payOrderUuid);
-        return result.toString();
+        //根据uuid找出订单
+        PayOrder payOrder = payService.findPayOrderByUuid(payOrderUuid);
+        //根据订单id找出比特币收款地址
+        BitcoinAddress bitcoinAddress
+                = bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
+        //根据比特币地址查询交易列表
+        List<BitcoinTransaction> transactionsFromNet
+                = bitcoinTransactionService.findBitcoinTransactionsByBitcoinAddressFromNet(bitcoinAddress);
+        //更新交易到数据库
+        boolean changed = bitcoinTransactionService.updateTransactionsToDatabase(transactionsFromNet);
+        return changed + "";
     }
 
 }

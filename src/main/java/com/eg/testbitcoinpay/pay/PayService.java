@@ -3,7 +3,7 @@ package com.eg.testbitcoinpay.pay;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddress;
 import com.eg.testbitcoinpay.bitcoin.address.BitcoinAddressService;
 import com.eg.testbitcoinpay.bitcoin.jsonrpc.BitcoinJsonRpcService;
-import com.eg.testbitcoinpay.bitcoin.jsonrpc.bean.ListtransactionsResponse;
+import com.eg.testbitcoinpay.bitcoin.transaction.BitcoinTransactionService;
 import com.eg.testbitcoinpay.bitcoin.util.BitcoinUtil;
 import com.eg.testbitcoinpay.huobi.QueryPriceUtil;
 import com.eg.testbitcoinpay.order.PayOrder;
@@ -11,13 +11,11 @@ import com.eg.testbitcoinpay.order.PayOrderRepository;
 import com.eg.testbitcoinpay.pay.util.UsdUtil;
 import com.eg.testbitcoinpay.util.Constants;
 import com.eg.testbitcoinpay.util.UuidUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class PayService {
@@ -25,6 +23,8 @@ public class PayService {
     private PayOrderRepository payOrderRepository;
     @Resource
     private BitcoinAddressService bitcoinAddressService;
+    @Resource
+    private BitcoinTransactionService bitcoinTransactionService;
 
     @Resource
     private BitcoinJsonRpcService bitcoinJsonRpcService;
@@ -78,35 +78,23 @@ public class PayService {
     }
 
     /**
-     * 查询订单是否支付完成
+     * 根据uuid查找订单
      *
      * @param payOrderUuid
      * @return
      */
-    public Boolean checkPayOrder(String payOrderUuid) {
-        //根据uuid查到订单
-        PayOrder payOrder = payOrderRepository.findByUuid(payOrderUuid);
-        if (payOrder == null) {
-            return null;
-        }
-        //如果已经支付
-        if (payOrder.getPaid()) {
-            return true;
-        }
-        //如果还没支付，那就要查比特币交易了，查比特币交易需要label，label在比特币地址表里
-        //那就，根据订单id，在比特币地址表中查到label，然后查询比特币交易
-        BitcoinAddress bitcoinAddress = bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
-        String label = bitcoinAddress.getLabel();
-        //查交易
-        List<ListtransactionsResponse> listtransactionsResponseList = bitcoinJsonRpcService.listtransactions(label);
-        //如果没有交易，返回false
-        if (CollectionUtils.isEmpty(listtransactionsResponseList)) {
-            return false;
-        }
-        //如果有交易
-        for (ListtransactionsResponse listtransactionsResponse : listtransactionsResponseList) {
-            String category = listtransactionsResponse.getCategory();
-
-        }
+    public PayOrder findPayOrderByUuid(String payOrderUuid) {
+        return payOrderRepository.findByUuid(payOrderUuid);
     }
+
+    /**
+     * 根据订单查找比特币收款地址
+     *
+     * @param payOrder
+     * @return
+     */
+    public BitcoinAddress findBitcoinAddressByPayOrder(PayOrder payOrder) {
+        return bitcoinAddressService.findBitcoinAddressByPayOrderId(payOrder.getId());
+    }
+
 }

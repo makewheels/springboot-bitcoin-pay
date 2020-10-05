@@ -10,6 +10,19 @@ import java.util.Date;
 @Entity
 @Table(name = "pay_order")
 public class PayOrder implements Serializable {
+
+    //订单创建，但没支付
+    public static final int STATE_NOT_PAID = 0;
+    //有付款，但是付款金额不够
+    public static final int STATE_PAID_BUT_NOT_ENOUGH = 1;
+    //付款够了，但是确认数不够6
+    public static final int STATE_PAID_ENOUGH_BUT_NOT_CONFIRM = 2;
+    //付款金额够了，确认数也够6了，支付已完成
+    public static final int STATE_PAID_ENOUGH_AND_CONFIRMED = 3;
+
+    //确认数量
+    public static int CONFIRM_AMOUNT = 6;
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,8 +64,7 @@ public class PayOrder implements Serializable {
     @Column(name = "bitcoin_price_usd")
     private Integer bitcoinPriceUsd;
 
-    @Column(name = "paid")
-    //该订单是否已经支付
-    private Boolean paid;
+    @Column(name = "state")
+    private Integer state;
 
 }

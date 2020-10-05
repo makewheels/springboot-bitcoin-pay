@@ -22,7 +22,7 @@ public class BitcoinTransaction implements Serializable {
     private Date createTime;
 
     @Column(name = "receive_address")
-    private Integer receiveAddress;
+    private String receiveAddress;
 
     @Column(name = "satoshi")
     private Long satoshi;
@@ -35,5 +35,8 @@ public class BitcoinTransaction implements Serializable {
 
     @Column(name = "txid")
     private String txid;
+
+    @Column(name = "category")
+    private String category;
 
 }

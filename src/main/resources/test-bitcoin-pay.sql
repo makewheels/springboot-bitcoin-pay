@@ -17,7 +17,7 @@ CREATE TABLE `pay_order` (
 	`bitcoin_amount` BIGINT COMMENT '比特币金额按satoshi计',
 
 	`bitcoin_price_usd` INT COMMENT '比特币美元价格',
-	`paid` BIT COMMENT '此订单是否已支付',
+	`state` INT COMMENT '订单状态',
 
 	PRIMARY KEY (`id`)
 );
@@ -40,12 +40,13 @@ CREATE TABLE `bitcoin_transaction` (
 	`id` INT NOT NULL AUTO_INCREMENT COMMENT 'uuid',
 	`uuid` VARCHAR(100) COMMENT 'id',
 	`create_time` DATETIME,
-	`receive_address` INT,
+	`receive_address` VARCHAR(200),
 	`satoshi` BIGINT,
 
 	`timereceived` DATETIME,
 	`confirmations` INT,
-	`txid` VARCHAR(100),
+	`txid` VARCHAR(200),
+	`category` VARCHAR(100),
 
 	PRIMARY KEY (`id`)
 );
