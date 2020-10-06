@@ -5,6 +5,7 @@
     <title>wait bitcoin pay</title>
 
     <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 </head>
 <body>
 <table>
@@ -16,9 +17,74 @@
         <td>bitcoin address</td>
         <td><span th:text="${bitcoinAddress}"></span></td>
     </tr>
+    <!--
+    Payment information
+    URI:
+    bitcoin:BC1QUS3EYP6CVMZMQXCNJN5AKDTFRCLV4F0FWWAWDA
+    ?amount=9.36000000
+    &label=tagsssssssss
+    &message=msggg
+    地址: bc1qus3eyp6cvmzmqxcnjn5akdtfrclv4f0fwwawda
+    总计: 9.36000000 BTC
+    标签: tagsssssssss
+    Message: msggg
+    -->
 </table>
 <span id="result"></span>
+<div id="qrCode"></div>
 <script>
+    $("#qrCode").qrcode({
+        // 渲染方式: 'canvas', 'image' or 'div'
+        render: 'div',
+
+        // 版本范围在 1 .. 40
+        minVersion: 1,
+        maxVersion: 40,
+
+        // 误差校正水平: 'L', 'M', 'Q' or 'H'
+        ecLevel: 'L',
+
+        // 如果绘制到现有画布上的像素偏移
+        left: 0,
+        top: 0,
+
+        // 尺寸(使用像素)
+        size: 200,
+
+        // 代码颜色或图像元素
+        fill: '#000',
+
+        // 背景颜色或图像元素，null则代表透明背景
+        background: null,
+
+        // 内容
+        text: "[[${bitcoinQrCode}]]",
+
+        // 相对于模块宽度的角半径: 0.0 .. 0.5
+        radius: 0,
+
+        // 模块中安静的区域
+        quiet: 0,
+
+        // 模式
+        // 0: normal
+        // 1: label strip
+        // 2: label box
+        // 3: image strip
+        // 4: image box
+        mode: 0,
+
+        mSize: 0.1,
+        mPosX: 0.5,
+        mPosY: 0.5,
+
+        label: 'no label',
+        fontname: 'sans',
+        fontcolor: '#000',
+
+        image: null
+    });
+
     var timer;
 
     function queryPayOrder() {

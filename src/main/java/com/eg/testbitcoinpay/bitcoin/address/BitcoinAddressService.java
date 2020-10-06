@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class BitcoinAddressService {
@@ -57,8 +56,7 @@ public class BitcoinAddressService {
      * @param payOrderId
      * @return
      */
-    public BitcoinAddress findBitcoinAddressByPayOrderId(Integer payOrderId) {
-        Optional<BitcoinAddress> bitcoinAddressOptional = bitcoinAddressRepository.findById(payOrderId);
-        return bitcoinAddressOptional.orElse(null);
+    public BitcoinAddress findBitcoinAddressByPayOrderId(int payOrderId) {
+        return bitcoinAddressRepository.findByPayOrderId(payOrderId);
     }
 }

@@ -64,6 +64,8 @@ public class PayController {
         //创建比特币地址
         BitcoinAddress bitcoinAddress = payService.createBitcoinAddress(payOrder);
         map.put("bitcoinAddress", bitcoinAddress.getAddress());
+        map.put("bitcoinQrCode", "bitcoin:" + bitcoinAddress.getAddress().toUpperCase()
+                + "?amount=" + bitcoinAmount);
         return "wait_bitcoin_pay";
     }
 
@@ -77,9 +79,9 @@ public class PayController {
     @ResponseBody
     public String queryPayOrder(String payOrderUuid) {
         PayOrderInfoResponse payOrderInfoResponse = payService.queryPayOrder(payOrderUuid);
-        String s = JSON.toJSONString(payOrderInfoResponse);
-        System.out.println(s);
-        return s;
+        String json = JSON.toJSONString(payOrderInfoResponse);
+        System.out.println(json);
+        return json;
     }
 
 }
